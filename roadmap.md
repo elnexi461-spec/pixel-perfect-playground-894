@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Enable Lovable Cloud and create secure data model
+- [x] Enable Lovable Cloud and create secure data model
 - [ ] Implement authentication and protected navigation
 - [ ] Build responsive customer overview, shop, farm, wallet, referrals, and profile
 - [ ] Build protected administration area
