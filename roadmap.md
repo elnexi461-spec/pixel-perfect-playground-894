@@ -8,3 +8,4 @@
 - [ ] Generate and integrate cohesive farm and animal visuals
 - [ ] Verify build, security, and responsive behavior
 - [ ] Publish the app
+- [ ] Export the completed project as a downloadable ZIP
