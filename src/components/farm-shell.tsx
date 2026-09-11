@@ -1,6 +1,6 @@
 import { Link, Outlet, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { BarChart3, Bird, Home, LogOut, Menu, PawPrint, PiggyBank, UserRound, Users, X } from 'lucide-react'
+import { Bird, Home, LogOut, Menu, PawPrint, PiggyBank, UserRound, Users, X } from 'lucide-react'
 import { useState } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -36,7 +36,7 @@ export function FarmShell() {
       <header className="sticky top-0 z-20 grid h-16 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b border-border/70 bg-background/90 px-4 backdrop-blur-lg lg:px-8">
         <Button variant="ghost" size="icon" onClick={() => setOpen(true)} className="lg:hidden"><Menu /></Button>
         <div className="min-w-0"><p className="truncate font-display text-lg capitalize">{path.replace('/', '').replace('-', ' ') || 'Mifugo'}</p><p className="hidden text-xs text-muted-foreground sm:block">Live estate account</p></div>
-        <div className="flex items-center gap-2"><span className="hidden rounded-md bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground sm:inline">KES account</span>{path === '/admin' && <BarChart3 className="size-5" />}</div>
+        <div className="flex items-center gap-2"><span className="hidden rounded-md bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground sm:inline">KES account</span></div>
       </header>
       <main className="mx-auto w-full max-w-[1440px] px-4 pb-28 pt-5 sm:px-6 lg:px-8 lg:pb-10"><Outlet /></main>
     </div>
