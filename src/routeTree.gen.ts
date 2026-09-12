@@ -20,6 +20,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedReferralsRouteImport } from './routes/_authenticated/referrals'
 import { Route as AuthenticatedShopRouteImport } from './routes/_authenticated/shop'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
+import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -75,6 +76,11 @@ const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
   path: '/wallet',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
+  id: '/api/public/mpesa-callback',
+  path: '/api/public/mpesa-callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/referrals': typeof AuthenticatedReferralsRoute
   '/shop': typeof AuthenticatedShopRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/referrals': typeof AuthenticatedReferralsRoute
   '/shop': typeof AuthenticatedShopRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/_authenticated/referrals': typeof AuthenticatedReferralsRoute
   '/_authenticated/shop': typeof AuthenticatedShopRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
+  '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/referrals'
     | '/shop'
     | '/wallet'
+    | '/api/public/mpesa-callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/referrals'
     | '/shop'
     | '/wallet'
+    | '/api/public/mpesa-callback'
   id:
     | '__root__'
     | '/'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/_authenticated/referrals'
     | '/_authenticated/shop'
     | '/_authenticated/wallet'
+    | '/api/public/mpesa-callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -159,6 +171,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWalletRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/mpesa-callback': {
+      id: '/api/public/mpesa-callback'
+      path: '/api/public/mpesa-callback'
+      fullPath: '/api/public/mpesa-callback'
+      preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -271,6 +291,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

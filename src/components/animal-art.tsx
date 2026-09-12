@@ -5,5 +5,5 @@ const positions: Record<string, string> = {
 }
 
 export function AnimalArt({ animal, className = '' }: { animal: string; className?: string }) {
-  return <div role="img" aria-label={`${animal} portrait`} className={`bg-cover bg-no-repeat ${className}`} style={{ backgroundImage: `url(${sprite})`, backgroundSize: '300% 400%', backgroundPosition: positions[animal] ?? positions.cow }} />
+  return <div role="img" aria-label={`${animal} portrait`} className={`bg-cover bg-no-repeat ${className}`} style={{ backgroundImage: `url(${sprite})`, backgroundSize: '300% 400%', backgroundPosition: positions[animal] ?? positions['cow'] }} />
 }
