@@ -5,9 +5,7 @@ import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware'
 const phoneSchema = z.string().regex(/^254\d{9}$/, 'Use a valid Kenyan number starting with 254')
 
 type PrivateRpcClient = {
-  schema: (name: string) => {
-    rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: string | number | boolean | null; error: { message: string } | null }>
-  }
+  rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: string | number | boolean | null; error: { message: string } | null }>
 }
 
 export const getFarmData = createServerFn({ method: 'GET' })
@@ -31,7 +29,7 @@ export const createProfile = createServerFn({ method: 'POST' })
   .inputValidator((input) => z.object({ email: z.string().email(), phone: phoneSchema, displayName: z.string().min(2).max(80), referralCode: z.string().max(20).optional() }).parse(input))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
-    const { data: profile, error } = await (supabaseAdmin as unknown as PrivateRpcClient).schema('private').rpc('ensure_my_profile', { _user_id: context.userId, _email: data.email, _phone: data.phone, _display_name: data.displayName, _referral_code: data.referralCode || null })
+    const { data: profile, error } = await (supabaseAdmin as unknown as PrivateRpcClient).rpc('svc_ensure_my_profile', { _user_id: context.userId, _email: data.email, _phone: data.phone, _display_name: data.displayName, _referral_code: data.referralCode || null })
     if (error) throw new Error(error.message)
     return { ok: profile !== null }
   })
@@ -41,7 +39,7 @@ export const buyPackage = createServerFn({ method: 'POST' })
   .inputValidator((input) => z.object({ packageId: z.number().int().positive() }).parse(input))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
-    const { data: id, error } = await (supabaseAdmin as unknown as PrivateRpcClient).schema('private').rpc('purchase_package', { _user_id: context.userId, _package_id: data.packageId })
+    const { data: id, error } = await (supabaseAdmin as unknown as PrivateRpcClient).rpc('svc_purchase_package', { _user_id: context.userId, _package_id: data.packageId })
     if (error) throw new Error(error.message)
     return { id: String(id ?? '') }
   })
@@ -50,7 +48,7 @@ export const collectFarmIncome = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
-    const { data: balance, error } = await (supabaseAdmin as unknown as PrivateRpcClient).schema('private').rpc('collect_income', { _user_id: context.userId })
+    const { data: balance, error } = await (supabaseAdmin as unknown as PrivateRpcClient).rpc('svc_collect_income', { _user_id: context.userId })
     if (error) throw new Error(error.message)
     return { balance: Number(balance ?? 0) }
   })
@@ -60,7 +58,7 @@ export const withdrawFunds = createServerFn({ method: 'POST' })
   .inputValidator((input) => z.object({ amount: z.number().positive(), phone: phoneSchema }).parse(input))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
-    const { data: id, error } = await (supabaseAdmin as unknown as PrivateRpcClient).schema('private').rpc('request_withdrawal', { _user_id: context.userId, _amount: data.amount, _phone: data.phone })
+    const { data: id, error } = await (supabaseAdmin as unknown as PrivateRpcClient).rpc('svc_request_withdrawal', { _user_id: context.userId, _amount: data.amount, _phone: data.phone })
     if (error) throw new Error(error.message)
     return { id: String(id ?? '') }
   })
