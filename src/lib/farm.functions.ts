@@ -6,7 +6,7 @@ const phoneSchema = z.string().regex(/^254\d{9}$/, 'Use a valid Kenyan number st
 
 type PrivateRpcClient = {
   schema: (name: string) => {
-    rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: { message: string } | null }>
+    rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: string | number | boolean | null; error: { message: string } | null }>
   }
 }
 
@@ -33,7 +33,7 @@ export const createProfile = createServerFn({ method: 'POST' })
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
     const { data: profile, error } = await (supabaseAdmin as unknown as PrivateRpcClient).schema('private').rpc('ensure_my_profile', { _user_id: context.userId, _email: data.email, _phone: data.phone, _display_name: data.displayName, _referral_code: data.referralCode || null })
     if (error) throw new Error(error.message)
-    return profile
+    return { ok: profile !== null }
   })
 
 export const buyPackage = createServerFn({ method: 'POST' })
@@ -43,7 +43,7 @@ export const buyPackage = createServerFn({ method: 'POST' })
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
     const { data: id, error } = await (supabaseAdmin as unknown as PrivateRpcClient).schema('private').rpc('purchase_package', { _user_id: context.userId, _package_id: data.packageId })
     if (error) throw new Error(error.message)
-    return { id }
+    return { id: String(id ?? '') }
   })
 
 export const collectFarmIncome = createServerFn({ method: 'POST' })
@@ -52,7 +52,7 @@ export const collectFarmIncome = createServerFn({ method: 'POST' })
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
     const { data: balance, error } = await (supabaseAdmin as unknown as PrivateRpcClient).schema('private').rpc('collect_income', { _user_id: context.userId })
     if (error) throw new Error(error.message)
-    return { balance }
+    return { balance: Number(balance ?? 0) }
   })
 
 export const withdrawFunds = createServerFn({ method: 'POST' })
@@ -62,7 +62,7 @@ export const withdrawFunds = createServerFn({ method: 'POST' })
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
     const { data: id, error } = await (supabaseAdmin as unknown as PrivateRpcClient).schema('private').rpc('request_withdrawal', { _user_id: context.userId, _amount: data.amount, _phone: data.phone })
     if (error) throw new Error(error.message)
-    return { id }
+    return { id: String(id ?? '') }
   })
 
 export const updateMyProfile = createServerFn({ method: 'POST' })
